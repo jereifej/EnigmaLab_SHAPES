@@ -124,7 +124,7 @@ kSC = np.array([[-1 / 8, -1 / 8, -1 / 8],  # from class material
 
 folder = "Sample List/"
 contrast = 1.3
-for sample in range(121, 180):
+for sample in range(121, 180): # this is after running 0,120 for a smaller dataset
     print("Sample " + str(sample))
     gray = toGray(im=training_images[sample], im_L=30, im_W=30, contrast=contrast)
 
