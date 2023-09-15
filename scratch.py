@@ -106,7 +106,7 @@ def putShapeInFolder(shape, shape_id, baseDir = "ShapeGroups",
     return  # get out!!
 
 
-
+# get dataset!
 image_sets = ['train.large', 'train.med', 'train.small', 'train.tiny']
 training_image_files = './exp_shapes/shapes_dataset/%s.input.npy'
 training_images_list = []
@@ -118,16 +118,13 @@ training_images = np.concatenate(training_images_list)
 
 # joe code starts here
 # --------------------------------------------------------------
-
 kSC = np.array([[-1 / 8, -1 / 8, -1 / 8],  # from class material
                 [-1 / 8, 1, -1 / 8],
                 [-1 / 8, -1 / 8, -1 / 8]])
-# iterating through every pixel, check each RGB channel & take max
+
 folder = "Sample List/"
-
-
 contrast = 1.3
-for sample in range(120):
+for sample in range(121, 180):
     print("Sample " + str(sample))
     gray = toGray(im=training_images[sample], im_L=30, im_W=30, contrast=contrast)
 
@@ -135,20 +132,17 @@ for sample in range(120):
     if not os.path.isdir(shape_folder):
         os.makedirs(shape_folder)
 
-    # cv2.imwrite(shape_folder + "gray" + str(sample) + ".png", gray)
-    # cv2.imwrite(shape_folder + "rgb" + str(sample) + ".png", training_images[sample])
-    # cv2.imwrite(shape_folder + "fSC" + str(sample) + ".png", SpacialContrast(gray))
-
+    # loops over each shape in 3x3 grid
     for j in range(3):
         for i in range(3):
-            # get shape
+            # make shape_id
             shape_id = str(sample) + "_" + str(j) + str(i)
-            # print("\nshape: " + shape_id)
 
+            # grayscale & SC the image
             shape = gray[(j * 10):(j * 10 + 10), (i * 10):(i * 10 + 10)]
             shapeSC = SpacialContrast(shape)
 
-            # cv2.imwrite(shape_folder + "gray" + shape_id + ".png", shape)
+            # Save the SC image with the rest of that sample and then find a group for it
             cv2.imwrite(shape_folder + "fSC" + shape_id + ".png", shapeSC)
 
             putShapeInFolder(shapeSC, shape_id, max_acceptable_error=16, pixel_ratio=255)
